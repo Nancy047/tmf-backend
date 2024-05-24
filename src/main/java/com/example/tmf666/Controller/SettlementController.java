@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
-@RequestMapping("/tmf-api/accountManagement/v4")
 @RestController
+@RequestMapping("/tmf-api/accountManagement/v4")
+@CrossOrigin("*")  
 public class SettlementController {
 
     @Autowired

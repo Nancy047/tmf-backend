@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/events")
+@CrossOrigin("*")
 public class NotificationListenerController {
 @Autowired
 private ApplicationCreateEventRepo applicationCreateEventRepo;

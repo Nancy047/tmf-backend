@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/applicationOwners")
@@ -45,8 +44,8 @@ public ResponseEntity<List<ApplicationOwner>> getAllAplicationOwner(
             .body(page.getContent());
 }
     @GetMapping("Owner/{id}")
-    public ApplicationOwner retrieveApplicationOwner(@PathVariable Long id) {
-        return applicationOwnerRepository.findById(id).get();
+    public Optional<ApplicationOwner> retrieveApplicationOwner(@PathVariable Long id) {
+        return applicationOwnerRepository.findById(id);
     }
     @PatchMapping("/updateOwner/{id}")
     public ResponseEntity<ApplicationOwner> updateApplicationOwner(@PathVariable("id") Long id, @RequestBody ApplicationOwner updatedOwner) {

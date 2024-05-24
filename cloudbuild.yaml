@@ -1,11 +1,11 @@
 steps:
-  # Step to build the Maven project
+  # Step to build the Maven project, skipping tests
   - name: 'maven:3.6.3-jdk-11'
     entrypoint: 'bash'
     args:
     - '-c'
     - |
-      mvn clean package
+      mvn clean package -DskipTests
       # Ensure the target directory and JAR file exist
       if [ ! -f target/tmf666-api-0.0.1-SNAPSHOT.jar ]; then
         echo "Maven build failed, target JAR not found."

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tmf-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tmf-backend
+  template:
+    metadata:
+      labels:
+        app: tmf-backend
+    spec:
+      containers:
+      - name: tmf-backend
+        image: us-central1-docker.pkg.dev/lumen-b-ctl-047/b-ctl-047-artifact/tmf-backend:$SHORT_SHA
+        ports:
+        - containerPort: 8080

@@ -21,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/tmf-api/accountManagement/v4")
+@CrossOrigin("*")
 public class BillingCycleSpecificationController {
 
     @Autowired

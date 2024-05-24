@@ -1,44 +1,55 @@
 steps:
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud help -- SEARCH_TERMS
+  # Step to build the Maven project
+  - name: 'maven:3.6.3-jdk-11'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - |
+      mvn clean package
+      # Ensure the target directory and JAR file exist
+      if [ ! -f target/tmf666-api-0.0.1-SNAPSHOT.jar ]; then
+        echo "Maven build failed, target JAR not found."
+        exit 1
+      fi
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud config set project lumen-b-ctl-047 &&
-    gcloud config set compute/region us-central1 &&
-    gcloud config set compute/zone us-central1-c &&
-    gcloud config set container/cluster b-ctl-dev-cluster
+  # Step to set up gcloud configuration
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - |
+      gcloud config set project lumen-b-ctl-047 &&
+      gcloud config set compute/region us-central1 &&
+      gcloud config set compute/zone us-central1-c &&
+      gcloud config set container/cluster b-ctl-dev-cluster
 
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - build
-  - -t
-  - us-central1-docker.pkg.dev/lumen-b-ctl-047/b-ctl-047-artifact/tmf-backend:$SHORT_SHA
-  - .
+  # Step to build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+    - build
+    - -t
+    - us-central1-docker.pkg.dev/lumen-b-ctl-047/b-ctl-047-artifact/tmf-backend:$SHORT_SHA
+    - .
 
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - push
-  - us-central1-docker.pkg.dev/lumen-b-ctl-047/b-ctl-047-artifact/tmf-backend:$SHORT_SHA
+  # Step to push the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+    - push
+    - us-central1-docker.pkg.dev/lumen-b-ctl-047/b-ctl-047-artifact/tmf-backend:$SHORT_SHA
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    sed -i 's|image:.*|image: us-central1-docker.pkg.dev/lumen-b-ctl-047/b-ctl-047-artifact/tmf-backend:$SHORT_SHA|g' deployment.yaml
+  # Step to update the image in the Kubernetes deployment file
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - |
+      sed -i 's|image:.*|image: us-central1-docker.pkg.dev/lumen-b-ctl-047/b-ctl-047-artifact/tmf-backend:$SHORT_SHA|g' deployment.yaml
 
-- name: 'gcr.io/cloud-builders/gke-deploy'
-  args:
-  - apply
-  - --filename=deployment.yaml
-  - --namespace=default
-  - --cluster=b-ctl-dev-cluster
-  - --location=us-central1-c
+  # Step to apply the Kubernetes deployment
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+    - apply
+    - --filename=deployment.yaml
+    - --namespace=default
+    - --cluster=b-ctl-dev-cluster
+    - --location=us-central1-c

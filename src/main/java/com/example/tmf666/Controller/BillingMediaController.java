@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tmf-api/accountManagement/v4/billingPresentationMedia")
+@CrossOrigin("*")
 public class BillingMediaController {
 
     @Autowired

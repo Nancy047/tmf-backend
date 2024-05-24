@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/hub")
+@CrossOrigin("*")
 public class HubController {
 
     @Autowired

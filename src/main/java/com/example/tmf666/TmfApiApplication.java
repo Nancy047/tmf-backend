@@ -8,13 +8,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
+
 @SpringBootApplication
 public class TmfApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TmfApiApplication.class, args);
 	}
-
+@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override

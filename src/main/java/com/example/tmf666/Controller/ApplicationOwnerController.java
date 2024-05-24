@@ -20,6 +20,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/applicationOwners")
+@CrossOrigin("*")
 public class ApplicationOwnerController {
 
     @Autowired

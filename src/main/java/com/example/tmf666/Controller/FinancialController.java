@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/tmf-api/accountManagement/v4")
+@CrossOrigin("*")
 public class FinancialController {
 
     @Autowired
